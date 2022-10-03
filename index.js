@@ -1,9 +1,11 @@
+/* eslint-disable n/handle-callback-err */
 /* eslint-disable no-unused-vars */
 const http = require('http')
 const fs = require('fs')
 
 let homeContent = ''
 let projectContent = ''
+let registrationContent = ''
 
 fs.readFile('home.html', (err, home) => {
   if (err) {
@@ -18,13 +20,23 @@ fs.readFile('project.html', (err, project) => {
   }
   projectContent = project
 })
+fs.readFile('registration.html', (err, registration) => {
+  if (err) {
+    throw err
+  }
+  registrationContent = registration
+})
 http
   .createServer((request, response) => {
     const url = request.url
-    response.writeHeader(200, { 'Content-Type': 'text/html' })
+    response.writeHeader(200, { 'Content-Type': 'text/html' });
     switch (url) {
-      case '/registration':
+      case '/project':
         response.write(projectContent)
+        response.end()
+        break
+      case '/registration':
+        response.write(registrationContent)
         response.end()
         break
       default:
@@ -33,4 +45,4 @@ http
         break
     }
   })
-  .listen(5000)
+  .listen(3000)
