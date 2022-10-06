@@ -1,7 +1,6 @@
-/* eslint-disable n/handle-callback-err */
-/* eslint-disable no-unused-vars */
 const http = require('http')
 const fs = require('fs')
+const args = require('minimist')(process.argv.slice(2))
 
 let homeContent = ''
 let projectContent = ''
@@ -20,29 +19,36 @@ fs.readFile('project.html', (err, project) => {
   }
   projectContent = project
 })
+
 fs.readFile('registration.html', (err, registration) => {
   if (err) {
     throw err
   }
   registrationContent = registration
 })
-http
-  .createServer((request, response) => {
-    const url = request.url
-    response.writeHeader(200, { 'Content-Type': 'text/html' });
-    switch (url) {
-      case '/project':
-        response.write(projectContent)
-        response.end()
-        break
-      case '/registration':
-        response.write(registrationContent)
-        response.end()
-        break
-      default:
-        response.write(homeContent)
-        response.end()
-        break
-    }
-  })
-  .listen(3000)
+
+fs.readFile('home.html', (err, home) => {
+  if (err) {
+    throw err
+  }
+  http
+    .createServer((request, response) => {
+      const url = request.url
+      response.writeHeader(200, { 'Content-Type': 'text/html' })
+      switch (url) {
+        case '/project':
+          response.write(projectContent)
+          response.end()
+          break
+        case '/registration':
+          response.write(registrationContent)
+          response.end()
+          break
+        default:
+          response.write(homeContent)
+          response.end()
+          break
+      }
+    })
+    .listen(args.port)
+})
