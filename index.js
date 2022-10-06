@@ -6,28 +6,28 @@ let homeContent = ''
 let projectContent = ''
 let registrationContent = ''
 
-fs.readFile('home.html', (err, home) => {
+fs.readFile('./home', (err, home) => {
   if (err) {
     throw err
   }
   homeContent = home
 })
 
-fs.readFile('project.html', (err, project) => {
+fs.readFile('./project', (err, project) => {
   if (err) {
     throw err
   }
   projectContent = project
 })
 
-fs.readFile('registration.html', (err, registration) => {
+fs.readFile('./registration', (err, registration) => {
   if (err) {
     throw err
   }
   registrationContent = registration
 })
 
-fs.readFile('home.html', (err, home) => {
+fs.readFile('./home', (err, home) => {
   if (err) {
     throw err
   }
