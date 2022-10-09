@@ -1,50 +1,41 @@
-/* eslint-disable eqeqeq */
 /* eslint-disable no-undef */
 const todoList = () => {
   all = []
+
   const add = (todoItem) => {
     all.push(todoItem)
   }
+
   const markAsComplete = (index) => {
     all[index].completed = true
   }
-  const overdue = () => {
-    // Write the date check condition here and return the array of overdue items accordingly.
-    // FILL YOUR CODE HERE
-    // ..
-    // ..
-    // ..
-    return all.filter((item) => item.dueDate < new Date().toLocaleDateString('en-CA'))
-  }
 
-  function dueToday () {
-    // Write the date check condition here and return the array of todo items that are due today accordingly.
-    // FILL YOUR CODE HERE
-    // ..
-    // ..
-    // ..
-    return all.filter((item) => item.dueDate == new Date().toLocaleDateString('en-CA'))
-  }
-  const dueLater = () => {
-  // Write the date check condition here and return the array of todo items that are due later accordingly.
-  // FILL YOUR CODE HERE
-    // ..
-    // ..
-    // ..
-    return all.filter((item) => item.dueDate > new Date().toLocaleDateString('en-CA'))
-  }
+  const compareDate = (date) =>
+    new Date(date) - new Date(formattedDate(new Date()))
 
-  const toDisplayableList = (list) => {
-  // Format the To-Do list here, and return the output string as per the format given above.
-  // FILL YOUR CODE HERE
-    // ..
-    // ..
-    // ..
-    // return OUTPUT_STRING
-    return list.map(item => ` ${item.completed ? '[x]' : '[ ]'} ${item.title} ${item.dueDate == new Date().toLocaleDateString('en-CA')}`)
-  }
+  const overdue = () =>
+    all.filter((todo) => compareDate(todo.dueDate) < 0 && !todo.completed)
 
-  return { all, add, markAsComplete, overdue, dueToday, dueLater, toDisplayableList }
+  const dueToday = () => all.filter((todo) => compareDate(todo.dueDate) === 0)
+
+  const dueLater = () => all.filter((todo) => compareDate(todo.dueDate) > 0)
+
+  const toDisplayableList = (list) =>
+    list.map((todo) => {
+      const checkbox = todo.completed ? '[x]' : '[ ]'
+      const displayDate = compareDate(todo.dueDate) === 0 ? '' : todo.dueDate
+      return `${checkbox} ${todo.title} ${displayDate}`
+    }).join('\n')
+
+  return {
+    all,
+    add,
+    markAsComplete,
+    overdue,
+    dueToday,
+    dueLater,
+    toDisplayableList
+  }
 }
 
 // ####################################### #
@@ -53,7 +44,7 @@ const todoList = () => {
 
 const todos = todoList()
 
-const formattedDate = d => {
+const formattedDate = (d) => {
   return d.toISOString().split('T')[0]
 }
 
